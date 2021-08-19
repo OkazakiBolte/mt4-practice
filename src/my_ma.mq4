@@ -63,7 +63,7 @@ double LotsOptimized(){
         }
     }
 
-    if (lot < 0.1) lot = 0.1;
+    if (lot < 0.01) lot = 0.01;
     return (lot);
 }
 
@@ -125,12 +125,12 @@ void CheckForOpen(){
 }
 
 /* ---- Check for close order conditions and execute entry ---- */
-void CheckForClose(){
+bool CheckForClose(){
     double ma;
-    int ret;
+    bool ret = false;
 
     /* ---- Go trading only for the first tick of a new bar ---- */
-    if (Volume[0] > 1) return;
+    if (Volume[0] > 1) return(ret);
 
     /* ---- get the value of moving average ---- */
     ma = iMA(
@@ -177,6 +177,7 @@ void CheckForClose(){
             }
         }
     }
+    return(ret);
 }
 
 /* ---- OnTick function ---- */
@@ -186,6 +187,14 @@ void OnTick(){
         return;
     }
     int crnt_orders = CalculateCurrentOrders();
-    if (crnt_orders==0) CheckForOpen(); else CheckForClose();
+    bool ret;
+    if (crnt_orders==0){
+        CheckForOpen();
+    } else { // close and then recreate position
+        ret = CheckForClose();
+        if (ret){
+            CheckForOpen();
+        }
+    }
 }
 

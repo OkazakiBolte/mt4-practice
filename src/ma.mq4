@@ -40,7 +40,7 @@ double LotsOptimized(){
     int losses = 0; // number of loss orders
 
     double lot = NormalizeDouble( // rounds up a double number
-        AccountFreeMargin()*MaximumRisk / 1000.0, // 1 lot = 1000 USD?
+        AccountFreeMargin()*MaximumRisk / 100000.0, // 1 lot = 100,000 currency in XMTrading
         1 // round off to one decimal place. e.g. 3.1415 --> 3.1
     )
 
@@ -69,7 +69,7 @@ double LotsOptimized(){
         }
     }
 
-    if (lot < 0.1) lot = 0.1;
+    if (lot < 0.01) lot = 0.01;
     return (lot);
 }
 
