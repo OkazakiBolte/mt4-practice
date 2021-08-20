@@ -15,7 +15,7 @@ input int MovingShift = 0;
 /* ---- Calculate open positions ---- */
 int CalculateCurrentOrders(){
     int buys = 0, sells = 0;
-    /* ---- count up positions run buy this EA ---- */
+    /* ---- count up positions run by this EA ---- */
     for (int i=0; i<OrdersTotal(); i++){
         if (!OrderSelect(i, SELECT_BY_POS, MODE_TRADES)) break;
         if (OrderSymbol()==Symbol() && OrderMagicNumber()==MAGICMA){

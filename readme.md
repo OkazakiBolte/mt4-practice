@@ -1,20 +1,78 @@
 # MT4でEAを使えるようになるまでの練習
 
-- MT4はもともとWindows向けのアプリケーションで、UNIX系OS（macOSやLinux）で使うためWineを用いている
-  - WineはUNIX系OSでWindows向けのアプリケーションを動作させるためのソフトウェア
-- macOSの場合、`/Applications/MetaTrader\ 4.app/Contents/SharedSupport/metatrader4/support/metatrader4/drive_c/Program\ Files/MetaTrader\ 4/MQL4/Experts/`にEAのサンプルコードなどがあった
-- XMTradingのMT4をインストールすると、サンプルコードは`/Applications/XMTrading\ MT4.app/drive_c/Program\ Files\ \(x86\)/XMTrading\ MT4/MQL4/Experts/Moving\ Average.mq4`にあった
-
 - MQL4で作れるものは3つ（https://book.mql4.com/basics/programms）
   - Expert Advisor（tickごとに動作する。自動売買を行う）
   - custom indicator（tickごとに動作する。自動売買は行わず、チャート上に線を表示するなどの処理を行う）
   - script（動作は一度のみ）
 
-## How to download this repository
+- [MT4でEAを使えるようになるまでの練習](#mt4でeaを使えるようになるまでの練習)
+  - [MT4のインストール](#mt4のインストール)
+  - [このリポジトリのダウンロード](#このリポジトリのダウンロード)
+  - [開発への参加の仕方（Gitの使い方について）](#開発への参加の仕方gitの使い方について)
+  - [プログラムを実行するまでの流れ](#プログラムを実行するまでの流れ)
+  - [`Moving Average.mq4`の解読](#moving-averagemq4の解読)
+    - [`MaximumRisk = 0.02`](#maximumrisk--002)
+    - [poolと`OrderSelect()`関数について](#poolとorderselect関数について)
+      - [pool](#pool)
+      - [`OrderSelect`](#orderselect)
+    - [`if (Volume[0] > 1) return;`](#if-volume0--1-return)
+    - [英語](#英語)
+  - [`Moving Average.mq4`の改造](#moving-averagemq4の改造)
+  - [バッチテストの実行](#バッチテストの実行)
+
+## MT4のインストール
+
+参考のため、僕がMT4をインストールした手順を書いておきます。環境を合わせたいときはフォローしてください。
+
+1. [XMTradingのホームページ](https://www.xmtrading.com/jp/)に行く
+2. デモ口座を開設する
+   1. **取引プラットフォームタイプ：MT4**
+   2. 口座タイプ：Standard
+   3. 口座の基本通貨：JPY
+   4. あとはご自由に
+3. メールが送られてくるので、承認する。ログインIDをメモしておく
+4. [ここから](https://www.xmtrading.com/jp/platforms)プラットフォームに合わせたMT4をインストール
+5. MT4を起動し、言語を英語にして再起動（日本語だと文字化けする。Windowsだと大丈夫かも）
+6. 右下の「Invalid account」みたいなところから、ログインする
+   1. server: **XMTrading-Demo 3**
+   2. login ID: メモしたID
+   3. password: デモ口座開設時に設定したもの
+
+
+- MT4はもともとWindows向けのアプリケーションで、UNIX系OS（macOSやLinux）で使うためWineを用いている
+  - WineはUNIX系OSでWindows向けのアプリケーションを動作させるためのソフトウェア
+- Windowsの場合、`C:\\Program Files\XMTradeing MT4\MQL4\`にもろもろがあると思う
+- macOSの場合、`/Applications/MetaTrader\ 4.app/Contents/SharedSupport/metatrader4/support/metatrader4/drive_c/Program\ Files/MetaTrader\ 4/MQL4/Experts/`にEAのサンプルコードなどがあった
+- XMTradingのMT4をインストールすると、サンプルコードは`/Applications/XMTrading\ MT4.app/drive_c/Program\ Files\ \(x86\)/XMTrading\ MT4/MQL4/Experts/Moving\ Average.mq4`にあった
+
+## このリポジトリのダウンロード
 
 <div align="center">
     <img src="https://docs.github.com/assets/images/help/repository/code-button.png" width="500px">
 </div>
+
+ここから「Download ZIP」する。あるいは`git`コマンドが使えるならば
+
+```bash
+$ cd <where_you_want_to_download_this_repo>
+$ git clone https://github.com/JoyBolte/mt4-practice.git
+```
+
+## 開発への参加の仕方（Gitの使い方について）
+
+- Gitはバージョン管理のためのツールです
+- 誰が、いつ、どのように編集したかが記録される
+
+<div align="center">
+    <img src="./figures/gennba-neko.jpeg" width="500px">
+</div>
+
+このようなことがなくなる。
+
+
+**（Gitの使い方を書こうと思ったけど、大変になるのでやめた。もし自分の変更をここにmergeする方法を知りたいと思ったら声をかけてください）**
+
+
 
 ## プログラムを実行するまでの流れ
 
