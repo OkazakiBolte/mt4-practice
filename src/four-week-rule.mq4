@@ -1,6 +1,6 @@
 #property copyright "K. Okazaki"
 #property link "https://github.com/JoyBolte/mt4-practice"
-#property description "Four-weeks rule"
+#property description "Four-week rule"
 #property version "1.00"
 
 
@@ -23,7 +23,7 @@ int OnInit(){
 }
 
 /* ==== OnDeinit function ==== */
-void OnDeinit(){} // Does nothing
+// void OnDeinit(){} // Does nothing
 
 /* ==== Count up opened positions ==== */
 int CalculateCurrentOrders(){
@@ -46,8 +46,8 @@ double LotsOptimized(){
     int orders = OrdersHistoryTotal();
     int losses = 0;
     double lot_size = NormalizeDouble(
-        AccountFreeMargin()*MaximumRisk/100000.0, // 1 lot = 100,000 currency in XMTrading
-        1
+        AccountFreeMargin()*MaximumRisk/100000.0, // 1 lot = 100,000 units of currency in XMTrading
+        2
     );
     /* ---- Adjust lot size according to the number of consecutive losing trades ---- */
     if (DecreaseFactor>0){
@@ -65,7 +65,7 @@ double LotsOptimized(){
         }
         /* ---- If there are consecutive losing trades, decrease lot size  ---- */
         if (losses>1){
-            lot_size = NormalizeDouble(lot_size - lot_size*losses*DecreaseFactor, 1);
+            lot_size = NormalizeDouble(lot_size - lot_size*losses*DecreaseFactor, 2);
         }
     }
     if (lot_size < 0.01) lot_size = 0.01;
@@ -208,5 +208,6 @@ void OnTick(){
         isSuccess = PositionOpen();
     } else {
         isSuccess = PositionClose();
+        // if (isSuccess) PositionOpen();
     }
 }
