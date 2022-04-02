@@ -20,6 +20,7 @@
     - [英語](#英語)
   - [`Moving Average.mq4`の改造](#moving-averagemq4の改造)
   - [Back testの実行](#back-testの実行)
+  - [Indicatorを作りたい](#indicatorを作りたい)
 
 ## MT4のインストール
 
@@ -196,7 +197,7 @@ bool  OrderSelect(
 
 ```bash
 $ cd /Applications/XMTrading\ MT4.app/drive_c/Program\ Files\ \(x86\)/XMTrading\ MT4/MQL4/Experts/
-$ ln -s <path_to>/my_ma.mq4 my_ma.mq4
+$ ln -s <path_to>/mt4-practice/src/my_ma.mq4 my_ma.mq4
 $ ls -AltrhFs
 total 96
 -rwxrwxrwx  1 root     admin   6.1K  8 19 15:33 MACD Sample.mq4*
@@ -204,12 +205,24 @@ total 96
 -rw-r--r--  1 okazaki  admin    10K  8 19 15:33 MACD Sample.ex4
 -rw-r--r--  1 okazaki  admin    15K  8 19 15:33 Moving Average.ex4
 -rwxrwxrwx  1 root     admin   3.1K  8 19 16:26 mqlcache.dat*
-lrwxr-xr-x  1 okazaki  admin    46B  8 19 16:46 my_ma.mq4@ -> <path_to>/my_ma.mq4
+lrwxr-xr-x  1 okazaki  admin    46B  8 19 16:46 my_ma.mq4@ -> path_to>/mt4-practice/src/my_ma.mq4
 ```
 
 ## Back testの実行
 
 - やり方：https://www.forex.com/~/media/forex/files/services/metatrader/mt4-manuals/howtousemetatrader4-20190222-1.pdf
+- For the first time, it takes time to download data.
 - 10,000 USDとかでやらないと`OrderSend error 134`になる…（余剰証拠金が足りないということ）
 - `my_ma.mq4`は期間や時間足などによってprofitがプラスになったりマイナスになったり、安定しない
 - ポジションをクローズしたら逆のポジションを持つようにしたらどうか？
+
+
+## Indicatorを作りたい
+
+- MT4に付属している`Momentum.mq4`を解読して、カスタムインジケータを作れるようになりたい
+- メモをつけながら写経したのが`./src/my_momentum.mq4`
+
+- `#property strict`とやることで、例えば浮動小数点型変数を整数型変数に代入したときの情報の欠損、みたいなことをコンパイル時に警告してくれるようになるらしい
+- 他のことは`./src/my_momentum.mq4`にコメントで残してある
+- やっぱりソースコードを写経しながらわからないことを調べるというのは勉強になるなぁ
+
