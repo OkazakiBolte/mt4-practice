@@ -7,8 +7,9 @@
 
 - [MT4でEAを使えるようになるまでの練習](#mt4でeaを使えるようになるまでの練習)
   - [MT4のインストール](#mt4のインストール)
+    - [macOS (Probably you can install it into Windows in the same way)](#macos-probably-you-can-install-it-into-windows-in-the-same-way)
+    - [Ubuntu 20.04](#ubuntu-2004)
   - [このリポジトリのダウンロード](#このリポジトリのダウンロード)
-  - [開発への参加の仕方（Gitの使い方について）](#開発への参加の仕方gitの使い方について)
   - [プログラムを実行するまでの流れ](#プログラムを実行するまでの流れ)
   - [`Moving Average.mq4`の解読](#moving-averagemq4の解読)
     - [`MaximumRisk = 0.02`](#maximumrisk--002)
@@ -18,11 +19,13 @@
     - [`if (Volume[0] > 1) return;`](#if-volume0--1-return)
     - [英語](#英語)
   - [`Moving Average.mq4`の改造](#moving-averagemq4の改造)
-  - [バッチテストの実行](#バッチテストの実行)
+  - [Back testの実行](#back-testの実行)
 
 ## MT4のインストール
 
 参考のため、僕がMT4をインストールした手順を書いておきます。環境を合わせたいときはフォローしてください。
+
+### macOS (Probably you can install it into Windows in the same way)
 
 1. [XMTradingのホームページ](https://www.xmtrading.com/jp/)に行く
 2. デモ口座を開設する
@@ -31,7 +34,7 @@
    3. 口座の基本通貨：JPY
    4. あとはご自由に
 3. メールが送られてくるので、承認する。ログインIDをメモしておく
-4. [ここから](https://www.xmtrading.com/jp/platforms)プラットフォームに合わせたMT4をインストール
+4. [ここから](https://www.xmtrading.com/jp/platforms)プラットフォームに合わせたMT4をdownload
 5. MT4を起動し、言語を英語にして再起動（日本語だと文字化けする。Windowsだと大丈夫かも）
 6. 右下の「Invalid account」みたいなところから、ログインする
    1. server: **XMTrading-Demo 3**
@@ -45,6 +48,41 @@
 - macOSの場合、`/Applications/MetaTrader\ 4.app/Contents/SharedSupport/metatrader4/support/metatrader4/drive_c/Program\ Files/MetaTrader\ 4/MQL4/Experts/`にEAのサンプルコードなどがあった
 - XMTradingのMT4をインストールすると、サンプルコードは`/Applications/XMTrading\ MT4.app/drive_c/Program\ Files\ \(x86\)/XMTrading\ MT4/MQL4/Experts/Moving\ Average.mq4`にあった
 
+
+### Ubuntu 20.04
+
+```bash
+sudo dpkg --add-architecture i386 # 32-bit
+sudo apt install -y wine-stable winetricks # Install wine
+winetricks cjkfonts # Just installing a fonts
+```
+
+1. [XMTradingのホームページ](https://www.xmtrading.com/jp/)に行く
+2. デモ口座を開設する
+   1. **取引プラットフォームタイプ：MT4**
+   2. 口座タイプ：Standard
+   3. 口座の基本通貨：JPY
+   4. あとはご自由に
+3. メールが送られてくるので、承認する。ログインIDをメモしておく
+4. [ここから](https://www.xmtrading.com/jp/platforms)プラットフォームに合わせたMT4をdownload
+   1. `~/Downloads/xmtrading4setup.exe`
+
+```bash
+cd ~/Downloads/
+chmod +x xmtrading4setup.exe
+wine xmtrading4setup.exe
+```
+
+1. server: **XMTrading-Demo 3**
+2. login ID: メモしたID
+3. password: デモ口座開設時に設定したもの
+
+Voila !
+
+Shortcut settings: Rigt-click on the icons named `*.desktop` in your desktop. Then hit "Allow Launching".
+
+The example MQL4 source files are in `~/.wine/drive_c/Program\ Files\ \(x86\)/XMTrading\ MT4/MQL4/Experts/`.
+
 ## このリポジトリのダウンロード
 
 <div align="center">
@@ -55,24 +93,9 @@
 
 ```bash
 $ cd <where_you_want_to_download_this_repo>
-$ git clone https://github.com/JoyBolte/mt4-practice.git
+$ git clone https://github.com/OkazakiBolte/mt4-practice.git
+$ cd mt4-practice/
 ```
-
-## 開発への参加の仕方（Gitの使い方について）
-
-- Gitはバージョン管理のためのツールです
-- 誰が、いつ、どのように編集したかが記録される
-
-<div align="center">
-    <img src="./figures/gennba-neko.jpeg" width="500px">
-</div>
-
-このようなことがなくなる。
-
-
-**（Gitの使い方を書こうと思ったけど、大変になるのでやめた。もし自分の変更をここにmergeする方法を知りたいと思ったら声をかけてください）**
-
-
 
 ## プログラムを実行するまでの流れ
 
@@ -184,7 +207,7 @@ total 96
 lrwxr-xr-x  1 okazaki  admin    46B  8 19 16:46 my_ma.mq4@ -> <path_to>/my_ma.mq4
 ```
 
-## バッチテストの実行
+## Back testの実行
 
 - やり方：https://www.forex.com/~/media/forex/files/services/metatrader/mt4-manuals/howtousemetatrader4-20190222-1.pdf
 - 10,000 USDとかでやらないと`OrderSend error 134`になる…（余剰証拠金が足りないということ）
