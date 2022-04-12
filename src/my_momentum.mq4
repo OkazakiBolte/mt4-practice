@@ -30,7 +30,7 @@ int OnInit(void) {
 
 // ---- Momentum ----
 int OnCalculate(
-    // See the blog written Japanese below for what each variable means.
+    // See the blog written in Japanese below for what each variable means.
     // https://mt4program.blogspot.com/2016/01/mql013-oncalculate.html
     const int rates_total,
     const int prev_calculated,
@@ -46,7 +46,7 @@ int OnCalculate(
     // Check the number of bars and if it's less than the period, do nothing
     if (rates_total <= InpMomPeriod) return (0);
 
-    // Use ExtMomBuffer and "close" as a time series array (AS_SERIES).
+    // Use ExtMomBuffer and "close" as ime series arrays (AS_SERIES).
     // If the second argument is false,
     // data aligns from the oldest to the newest (the current bar corresponds to the largest index).
     // In MT4 software, it is common that we use a time series array whose elements align from the newest to the oldest

@@ -226,3 +226,31 @@ lrwxr-xr-x  1 okazaki  admin    46B  8 19 16:46 my_ma.mq4@ -> path_to>/mt4-pract
 - 他のことは`./src/my_momentum.mq4`にコメントで残してある
 - やっぱりソースコードを写経しながらわからないことを調べるというのは勉強になるなぁ
 
+- `rates_total`: バーの総数。現在のバーのインデックスが`0`だとすると、一番古いバーのインデックスは`rates_total - 1`となる。
+- `OnCalculate()`の最後には`rates_total`を返している（`return(rates_total);`）。
+- `prev_calculated`には前回の`OnCalculate()`の返り値が格納されている。すなわち、`prev_calculated`が0ならば、そのインジケータがはじめて起動したことを意味する。`prev_calculated`が`rates_total`と等しいならば、バーの本数に更新がないことを表す。また`prev_calculated == rates_total - 1`ならば、新しいバーが作成されたことを示している。
+
+```c
+// Simple moving average (sma[])を例として
+
+int i, limit;
+if (prev_calculated == 0) limit = rates_total - 1; // 初めてインジケータが起動したならば、最古のバーのインデックスをlimitとする
+else limit = rates_total - prev_calculated; // バーが新しく作成されればlimit = 1, されなくて、ただ価格が変動しただけならlimit = 0となる
+
+double tmp;
+for (i = limit; i >= 0; i--) {
+    // 古いバーから新しいバーに向かって計算する。
+    // Tickごとに起動するわけだが、バーの新規作成がなければsma[0]（現在の値）だけを計算する。
+    // 新しいバーが現れればsma[1]（1つ過去の値）とsma[0]（現在の値）を計算する。次回起動時にはsma[1]は計算されず、sma[0]だけが更新される
+
+    sma[i] = 0.0;
+    tmp = 0.0;
+    if (rates_total >= i + SMA_PERIOD) { // 過去の部分を計算するのに、計算で使用するバーの本数が全体のバー数を超えるとエラーになるので（特に初回時）、それを避ける
+        for (j = 0; j < SMA_PERIOD; j++) {
+            tmp += Close[i + j];
+        }
+        sma[i] = tmp / SMA_PERIOD;
+    }
+}
+```
+
